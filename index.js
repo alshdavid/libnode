@@ -1,7 +1,11 @@
 import syncFs from "node:fs";
 import { cpus } from "node:os";
 import fs from "node:fs/promises";
+import path from "node:path";
+import url from "node:url";
 import { spawn } from "node:child_process";
+
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
 
 const nodejsGithubRepo = "https://github.com/nodejs/node";
 
@@ -47,6 +51,9 @@ if (!syncFs.existsSync("node")) {
     {}
   );
 }
+
+console.log(path.join(__dirname, 'node','src','node.cc'))
+syncFs.cpSync(path.join(__dirname, 'wrapper','node.cc'), path.join(__dirname, 'node', 'src', 'node.cc'), { force: true })
 
 process.chdir("node");
 
