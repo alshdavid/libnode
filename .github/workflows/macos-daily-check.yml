@@ -1,0 +1,74 @@
+name: Macos
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  update:
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
+        include:
+          - arch: arm64
+            os: macos-14
+            is_arm: true
+          - arch: amd64
+            os: macos-13
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup ccache
+        uses: actions/cache@v4
+        with:
+          path: .ccache
+          save-always: true
+          key: ${{ github.workflow }}-${{ matrix.arch }}-${{ hashFiles('**/version.txt') }}
+          restore-keys: |
+            ${{ github.workflow }}-${{ matrix.arch }}-${{ hashFiles('**/version.txt') }}
+            ${{ github.workflow }}-${{ matrix.arch }}-
+
+      - name: Install building tools
+        run: |
+          sudo chown -R $(whoami) $(brew --prefix)/*
+
+          # homebrew fails to update python 3.9.1 to 3.9.1.1 due to unlinking failure
+          sudo rm -f /usr/local/bin/2to3 || true
+          # homebrew fails to update python from 3.9 to 3.10 due to another unlinking failure
+          sudo rm -f /usr/local/bin/idle3 || true
+          sudo rm -f /usr/local/bin/pydoc3 || true
+          sudo rm -f /usr/local/bin/python3 || true
+          sudo rm -f /usr/local/bin/python3-config || true
+
+          brew install git node ninja nasm ccache
+
+      - name: Run the script
+        env:
+          CC: "gcc"
+          CXX: "g++"
+          ARCH: ${{ matrix.arch }}
+        run: |
+          export CCACHE_COMPRESS="true"
+          export CCACHE_BASEDIR="$GITHUB_WORKSPACE"
+          export CCACHE_DIR="$CCACHE_BASEDIR/.ccache"
+          export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
+          mkdir -p "$CCACHE_DIR"
+
+          node index.js
+
+      - name: Create archive
+        run: |
+          cd node/out/Release
+          ln libnode.* libnode.dylib
+          tar -cJf "libnode-${{ matrix.arch }}-macos.tar.xz" libnode.* node
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          overwrite: true
+          tag: ${{ github.ref }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: node/out/Release/libnode-${{ matrix.arch }}-macos.tar.xz
