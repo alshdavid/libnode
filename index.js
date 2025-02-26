@@ -1,4 +1,4 @@
-import syncFs from "node:fs";
+import syncFs, { fsyncSync } from "node:fs";
 import { cpus } from "node:os";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -39,30 +39,44 @@ if (!syncFs.existsSync("node")) {
   );
 }
 
-syncFs.cpSync(path.join(__dirname, 'wrapper','node.cc'), path.join(__dirname, 'node', 'src', 'node.cc'), { force: true })
+const wrapper = syncFs.readFileSync(path.join(__dirname, 'wrapper','node.cc'), 'utf8')
+const originalPath = path.join(__dirname, 'node', 'src', 'node.cc')
+const original = syncFs.readFileSync(originalPath, 'utf8')
 
-process.chdir("node");
+syncFs.appendFileSync(
+  originalPath,
+  "\n\n" + wrapper,
+  'utf8'
+)
 
-let extraArgs = [];
-if (process.platform == "win32") {
-  await spawnAsync(".\\vcbuild.bat", [ARCH, "dll", "openssl-no-asm"]);
-  process.exit()
-} 
+try {
+  process.chdir("node");
 
-if (ARCH === "arm64") {
-  extraArgs.push("--with-arm-float-abi");
-  extraArgs.push("hard");
-  extraArgs.push("--with-arm-fpu");
-  extraArgs.push("neon");
+  let extraArgs = [];
+  if (process.platform == "win32") {
+    await spawnAsync(".\\vcbuild.bat", [ARCH, "dll", "openssl-no-asm"]);
+    syncFs.writeFileSync(originalPath, original, 'utf8')
+    process.exit()
+  } 
+
+  if (ARCH === "arm64") {
+    extraArgs.push("--with-arm-float-abi");
+    extraArgs.push("hard");
+    extraArgs.push("--with-arm-fpu");
+    extraArgs.push("neon");
+  }
+
+  await spawnAsync("./configure", [
+    "--shared",
+    "--dest-cpu",
+    ARCH,
+    "--dest-os",
+    OS,
+    ...extraArgs,
+  ]);
+
+  await spawnAsync("make", [`-j${threadCount}`]);
+  syncFs.writeFileSync(originalPath, original, 'utf8')
+} catch (error) {
+  syncFs.writeFileSync(originalPath, original, 'utf8') 
 }
-
-await spawnAsync("./configure", [
-  "--shared",
-  "--dest-cpu",
-  ARCH,
-  "--dest-os",
-  OS,
-  ...extraArgs,
-]);
-
-await spawnAsync("make", [`-j${threadCount}`]);
