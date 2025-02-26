@@ -34,7 +34,7 @@ jobs:
         run: |
           apt-get install --yes ca-certificates curl gnupg && curl -sL https://deb.nodesource.com/setup_21.x | bash -
           apt-get update
-          apt-get install --yes git nodejs python3 python3-pip gcc g++ make nasm ccache linux-libc-dev linux-libc-dev-arm64-cross binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+          apt-get install --yes git nodejs python3 python3-pip gcc g++ make nasm ccache linux-libc-dev
 
       - name: Run the script
         env:

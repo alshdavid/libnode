@@ -9,24 +9,11 @@ const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
 
 const nodejsGithubRepo = "https://github.com/nodejs/node";
 
-let OS = process.env.OS;
-const ARCH = process.env.ARCH == "amd64" ? "x64" : "arm64";
+const OS = process.env.OS || { "darwin": "mac", "win32": "windows" }[process.platform] || process.platform;
+const ARCH = process.env.ARCH || process.arch;
 
 const coreCount = cpus().length;
 const threadCount = coreCount * 2;
-let current_os;
-switch (process.platform) {
-  case "darwin":
-    current_os = "mac";
-    break;
-  case "win32":
-    current_os = "win";
-    break;
-  default:
-    current_os = "linux";
-    break;
-}
-if (!OS) OS = current_os;
 
 const spawnAsync = (program, args) =>
   new Promise((resolve, reject) => {
@@ -40,7 +27,7 @@ const spawnAsync = (program, args) =>
       if (code == 0) resolve(code.toString());
       else reject(code.toString());
     });
-  });
+});
 
 const version = await fs.readFile("version.txt", { encoding: "utf8" });
 if (!syncFs.existsSync("node")) {
@@ -52,7 +39,6 @@ if (!syncFs.existsSync("node")) {
   );
 }
 
-console.log(path.join(__dirname, 'node','src','node.cc'))
 syncFs.cpSync(path.join(__dirname, 'wrapper','node.cc'), path.join(__dirname, 'node', 'src', 'node.cc'), { force: true })
 
 process.chdir("node");
@@ -60,21 +46,23 @@ process.chdir("node");
 let extraArgs = [];
 if (process.platform == "win32") {
   await spawnAsync(".\\vcbuild.bat", [ARCH, "dll", "openssl-no-asm"]);
-} else {
-  if (ARCH === "arm64") {
-    extraArgs.push("--with-arm-float-abi");
-    extraArgs.push("hard");
-    extraArgs.push("--with-arm-fpu");
-    extraArgs.push("neon");
-  }
+  process.exit()
+} 
 
-  await spawnAsync("./configure", [
-    "--shared",
-    "--dest-cpu",
-    ARCH,
-    "--dest-os",
-    OS,
-    ...extraArgs,
-  ]);
-  await spawnAsync("make", [`-j${threadCount}`]);
+if (ARCH === "arm64") {
+  extraArgs.push("--with-arm-float-abi");
+  extraArgs.push("hard");
+  extraArgs.push("--with-arm-fpu");
+  extraArgs.push("neon");
 }
+
+await spawnAsync("./configure", [
+  "--shared",
+  "--dest-cpu",
+  ARCH,
+  "--dest-os",
+  OS,
+  ...extraArgs,
+]);
+
+await spawnAsync("make", [`-j${threadCount}`]);

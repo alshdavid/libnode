@@ -1,0 +1,33 @@
+name: Release
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+on: 
+  push:
+    branches:
+      - "main"
+
+jobs:
+  build_linux_x86_64:
+    name: "🐥 Linux x86_64"
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - env:
+          CC: "gcc"
+          CXX: "g++"
+        run: node index.js
+      - run: |
+          cd node/out/Release
+          ln libnode.so.* libnode.so
+          tar -cJf "libnode-${{ matrix.arch }}-linux.tar.xz" libnode.* node
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          overwrite: true
+          tag: ${{ github.ref }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: node/out/Release/libnode-${{ matrix.arch }}-linux.tar.xz
