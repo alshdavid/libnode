@@ -1,5 +1,5 @@
 [package]
-name = "rust_node_embedded"
+name = "edon_example_basic"
 version = "0.0.0-local"
 authors = ["alshdavid"]
 repository = "https://github.com/alshdavid/libnode"
@@ -9,4 +9,3 @@ license = "MIT"
 
 [dependencies]
 libnode_rs = { path = "../../packages/libnode_rs" }
-libloading = "*"

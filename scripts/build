@@ -58,7 +58,7 @@ function build-nodejs-sources() {
     if [ "$arch" = "arm64" ]; then
         ./configure --shared --dest-cpu $arch --dest-os $platform --with-arm-float-abi hard --with-arm-fpu neon
     else
-        ./configure --shared --dest-cpu $arch --dest-os $platform
+        ./configure --shared --dest-cpu $arch --dest-os $platform --disable-single-executable-application
     fi
     make -j$threads
 }
@@ -66,7 +66,7 @@ function build-nodejs-sources() {
 function build-nodejs-sources-static() {
     cd $dir_nodejs_sources
     if [ "$arch" = "arm64" ]; then
-        ./configure --shared --dest-cpu $arch --dest-os $platform --with-arm-float-abi hard --with-arm-fpu neon --fully-static --enable-static
+        ./configure --shared --dest-cpu $arch --dest-os $platform --with-arm-float-abi hard --with-arm-fpu neon --fully-static --enable-static 
     else
         ./configure --shared --dest-cpu $arch --dest-os $platform --fully-static --enable-static
     fi
