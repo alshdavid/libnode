@@ -14,6 +14,16 @@ This project automatically monitors Node.js for new releases and compiles the la
 
 - Windows ARM64 (The Windows ARM64 support is dependent on solving [https://github.com/nodejs/node/issues/52664](https://github.com/nodejs/node/issues/52664))
 
+## Building
+
+```bash
+# Linux
+./scripts/build
+
+# Windows
+./scripts/build.ps1
+```
+
 ## Usage:
 
 Download your suitable release and place the binaries into your Operating System's shared library location. On Linux for example, you'd do:

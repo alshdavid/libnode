@@ -75,8 +75,9 @@ try {
     ...extraArgs,
   ]);
 
-  await spawnAsync("make", [`-j${threadCount}`]);
-  syncFs.writeFileSync(originalPath, original, 'utf8')
+
+  // await spawnAsync("make", [`-j${threadCount}`]);
+  // syncFs.writeFileSync(originalPath, original, 'utf8')
 } catch (error) {
   syncFs.writeFileSync(originalPath, original, 'utf8') 
 }

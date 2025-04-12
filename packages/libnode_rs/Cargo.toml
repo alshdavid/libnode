@@ -1,0 +1,10 @@
+[package]
+name = "libnode_rs"
+version = "0.0.0-local"
+authors = ["alshdavid"]
+repository = "https://github.com/alshdavid/libnode"
+description = "Library embedding Nodejs (libnode) within Rust"
+edition = "2021"
+license = "MIT"
+
+[lib]

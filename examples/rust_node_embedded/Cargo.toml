@@ -1,0 +1,11 @@
+[package]
+name = "rust_node_embedded"
+version = "0.0.0-local"
+authors = ["alshdavid"]
+repository = "https://github.com/alshdavid/libnode"
+description = "Example of Nodejs embedded within a Rust program"
+edition = "2021"
+license = "MIT"
+
+[dependencies]
+libnode_rs = { path = "../../packages/libnode_rs" }

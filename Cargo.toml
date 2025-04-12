@@ -1,0 +1,7 @@
+[workspace]
+resolver = "2"
+
+members = [
+  "./packages/libnode_rs",
+  "./examples/rust_node_embedded"
+]
