@@ -9,3 +9,4 @@ license = "MIT"
 
 [dependencies]
 libnode_rs = { path = "../../packages/libnode_rs" }
+libloading = "*"

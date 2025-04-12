@@ -1,3 +1,5 @@
+pub mod napi;
+pub mod node;
 pub mod libnode;
 mod node_start;
 

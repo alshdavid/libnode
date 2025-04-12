@@ -29,6 +29,7 @@ dependencies = [
 name = "rust_node_embedded"
 version = "0.0.0-local"
 dependencies = [
+ "libloading",
  "libnode_rs",
 ]
 

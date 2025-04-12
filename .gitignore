@@ -1,4 +1,4 @@
-node
+packages/libnode/node
 .ccache
 release
 target
