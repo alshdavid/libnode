@@ -8,4 +8,4 @@ edition = "2021"
 license = "MIT"
 
 [dependencies]
-libnode_rs = { path = "../../packages/libnode_rs" }
+edon = { path = "../../packages/edon" }

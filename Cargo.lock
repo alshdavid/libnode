@@ -18,6 +18,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
+name = "edon"
+version = "0.0.7"
+dependencies = [
+ "libffi",
+ "libloading",
+]
+
+[[package]]
+name = "edon_example_basic"
+version = "0.0.0-local"
+dependencies = [
+ "edon",
+]
+
+[[package]]
 name = "libc"
 version = "0.2.171"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -50,22 +65,6 @@ checksum = "fc2f4eb4bc735547cfed7c0a4922cbd04a4655978c09b54f1f7b228750664c34"
 dependencies = [
  "cfg-if",
  "windows-targets",
-]
-
-[[package]]
-name = "libnode_rs"
-version = "0.0.2"
-dependencies = [
- "libffi",
- "libloading",
-]
-
-[[package]]
-name = "rust_node_embedded"
-version = "0.0.0-local"
-dependencies = [
- "libloading",
- "libnode_rs",
 ]
 
 [[package]]
