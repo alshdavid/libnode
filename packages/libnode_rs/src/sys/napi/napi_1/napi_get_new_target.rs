@@ -7,8 +7,6 @@ type SIGNATURE =
   fn(env: napi_env, cbinfo: napi_callback_info, result: *mut napi_value) -> napi_status;
 static CACHE: OnceLock<super::super::super::libnode::DynSymbol<SIGNATURE>> = OnceLock::new();
 
-
-
 pub unsafe fn napi_get_new_target(
   env: napi_env,
   cbinfo: napi_callback_info,

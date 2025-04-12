@@ -8,8 +8,6 @@ type SIGNATURE =
   fn(env: napi_env, str_: *const c_char, length: isize, result: *mut napi_value) -> napi_status;
 static CACHE: OnceLock<super::super::super::libnode::DynSymbol<SIGNATURE>> = OnceLock::new();
 
-
-
 pub unsafe fn napi_create_string_latin1(
   env: napi_env,
   str_: *const c_char,

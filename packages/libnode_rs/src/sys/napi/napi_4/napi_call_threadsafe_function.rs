@@ -11,8 +11,6 @@ type SIGNATURE = fn(
 ) -> napi_status;
 static CACHE: OnceLock<super::super::super::libnode::DynSymbol<SIGNATURE>> = OnceLock::new();
 
-
-
 pub unsafe fn napi_call_threadsafe_function(
   func: napi_threadsafe_function,
   data: *mut c_void,

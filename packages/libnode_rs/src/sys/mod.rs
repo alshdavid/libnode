@@ -1,6 +1,6 @@
+pub mod libnode;
 pub mod napi;
 pub mod node;
-pub mod libnode;
 mod node_start;
 
 pub use self::node_start::*;

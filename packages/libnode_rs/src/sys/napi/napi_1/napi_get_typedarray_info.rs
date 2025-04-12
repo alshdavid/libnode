@@ -15,8 +15,6 @@ type SIGNATURE = fn(
 ) -> napi_status;
 static CACHE: OnceLock<super::super::super::libnode::DynSymbol<SIGNATURE>> = OnceLock::new();
 
-
-
 pub unsafe fn napi_get_typedarray_info(
   env: napi_env,
   typedarray: napi_value,

@@ -273,9 +273,18 @@ pub struct napi_node_version {
   pub release: *const c_char,
 }
 
-pub type napi_addon_register_func =
-  Option<unsafe extern "C" fn(env: napi_env, exports: napi_value) -> napi_value>;
-  
+pub type napi_addon_register_func = Option<
+  unsafe extern "C" fn(
+    env: napi_env,
+    exports: napi_value,
+  ) -> napi_value,
+>;
+
+// pub type napi_addon_register_func = Option<
+//  *mut c_void
+// >;
+
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct napi_module {
@@ -283,6 +292,7 @@ pub struct napi_module {
   pub nm_flags: c_uint,
   pub nm_filename: *const c_char,
   pub nm_register_func: napi_addon_register_func,
+  // pub nm_register_func: *mut c_void,
   pub nm_modname: *const c_char,
   pub nm_priv: *mut c_void,
   pub reserved: [*mut c_void; 4usize],

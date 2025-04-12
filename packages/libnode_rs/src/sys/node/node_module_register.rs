@@ -1,24 +1,30 @@
-use std::{ffi::{c_char, c_int, c_uint, c_void}, sync::OnceLock};
+use std::ffi::c_char;
+use std::ffi::c_int;
+use std::ffi::c_uint;
+use std::ffi::c_void;
+use std::sync::OnceLock;
 
 const SYMBOL: &[u8] = "node_module_register".as_bytes();
 type SIGNATURE = fn(mod_: *mut node_module);
 
 #[allow(non_camel_case_types)]
-pub type node_addon_register_func =
-  Option<unsafe extern "C" fn(
+pub type node_addon_register_func = Option<
+  unsafe extern "C" fn(
     // v8::Local<v8::Object> exports,
     // v8::Local<v8::Value> module,
     // void* priv
-  )>;
+  ),
+>;
 
 #[allow(non_camel_case_types)]
-pub type node_addon_context_register_func =
-  Option<unsafe extern "C" fn(
+pub type node_addon_context_register_func = Option<
+  unsafe extern "C" fn(
     // v8::Local<v8::Object> exports,
     // v8::Local<v8::Value> module,
     // v8::Local<v8::Context> context,
     // void* priv
-  )>;
+  ),
+>;
 
 #[allow(non_camel_case_types)]
 #[repr(C)]

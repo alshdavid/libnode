@@ -6,8 +6,6 @@ const SYMBOL: &[u8] = "napi_object_seal".as_bytes();
 type SIGNATURE = fn(env: napi_env, object: napi_value) -> napi_status;
 static CACHE: OnceLock<super::super::super::libnode::DynSymbol<SIGNATURE>> = OnceLock::new();
 
-
-
 pub unsafe fn napi_object_seal(
   env: napi_env,
   object: napi_value,

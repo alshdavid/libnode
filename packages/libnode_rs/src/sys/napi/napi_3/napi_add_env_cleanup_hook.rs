@@ -11,8 +11,6 @@ type SIGNATURE = fn(
 ) -> napi_status;
 static CACHE: OnceLock<super::super::super::libnode::DynSymbol<SIGNATURE>> = OnceLock::new();
 
-
-
 pub unsafe fn napi_add_env_cleanup_hook(
   env: napi_env,
   fun: Option<unsafe extern "C" fn(arg: *mut c_void)>,

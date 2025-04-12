@@ -6,8 +6,6 @@ const SYMBOL: &[u8] = "napi_get_date_value".as_bytes();
 type SIGNATURE = fn(env: napi_env, value: napi_value, result: *mut f64) -> napi_status;
 static CACHE: OnceLock<super::super::super::libnode::DynSymbol<SIGNATURE>> = OnceLock::new();
 
-
-
 pub unsafe fn napi_get_date_value(
   env: napi_env,
   value: napi_value,

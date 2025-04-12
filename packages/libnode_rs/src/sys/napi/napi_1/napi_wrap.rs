@@ -14,8 +14,6 @@ type SIGNATURE = fn(
 ) -> napi_status;
 static CACHE: OnceLock<super::super::super::libnode::DynSymbol<SIGNATURE>> = OnceLock::new();
 
-
-
 pub unsafe fn napi_wrap(
   env: napi_env,
   js_object: napi_value,

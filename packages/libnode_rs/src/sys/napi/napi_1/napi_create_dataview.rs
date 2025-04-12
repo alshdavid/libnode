@@ -19,5 +19,11 @@ pub unsafe fn napi_create_dataview(
   byte_offset: usize,
   result: *mut napi_value,
 ) -> napi_status {
-  CACHE.get_or_init(|| super::super::super::libnode::libnode_sym(SYMBOL))(env, length, arraybuffer, byte_offset, result)
+  CACHE.get_or_init(|| super::super::super::libnode::libnode_sym(SYMBOL))(
+    env,
+    length,
+    arraybuffer,
+    byte_offset,
+    result,
+  )
 }

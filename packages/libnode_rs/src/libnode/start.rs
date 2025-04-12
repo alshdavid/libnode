@@ -2,13 +2,14 @@ use std::ffi::c_char;
 use std::ffi::c_int;
 use std::ffi::CString;
 
-use crate::sys;
 use crate::libnode::mark_running;
 use crate::libnode::mark_stopped;
+use crate::sys;
 
 pub fn start_blocking<Args: AsRef<str>>(argv: &[Args]) -> crate::Result<()> {
   mark_running()?;
   let current_exe = CString::new(std::env::current_exe().unwrap().to_str().unwrap()).unwrap();
+
   let args = argv
     .iter()
     .map(|arg| CString::new(arg.as_ref()).unwrap())

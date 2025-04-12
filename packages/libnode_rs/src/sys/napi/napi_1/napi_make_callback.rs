@@ -14,8 +14,6 @@ type SIGNATURE = fn(
 ) -> napi_status;
 static CACHE: OnceLock<super::super::super::libnode::DynSymbol<SIGNATURE>> = OnceLock::new();
 
-
-
 pub unsafe fn napi_make_callback(
   env: napi_env,
   async_context: napi_async_context,
@@ -25,5 +23,13 @@ pub unsafe fn napi_make_callback(
   argv: *const napi_value,
   result: *mut napi_value,
 ) -> napi_status {
-  CACHE.get_or_init(|| super::super::super::libnode::libnode_sym(SYMBOL))(env, async_context, recv, func, argc, argv, result)
+  CACHE.get_or_init(|| super::super::super::libnode::libnode_sym(SYMBOL))(
+    env,
+    async_context,
+    recv,
+    func,
+    argc,
+    argv,
+    result,
+  )
 }

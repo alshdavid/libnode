@@ -7,8 +7,6 @@ const SYMBOL: &[u8] = "napi_throw_type_error".as_bytes();
 type SIGNATURE = fn(env: napi_env, code: *const c_char, msg: *const c_char) -> napi_status;
 static CACHE: OnceLock<super::super::super::libnode::DynSymbol<SIGNATURE>> = OnceLock::new();
 
-
-
 pub unsafe fn napi_throw_type_error(
   env: napi_env,
   code: *const c_char,

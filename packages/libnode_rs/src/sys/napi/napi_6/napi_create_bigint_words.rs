@@ -13,8 +13,6 @@ type SIGNATURE = fn(
 ) -> napi_status;
 static CACHE: OnceLock<super::super::super::libnode::DynSymbol<SIGNATURE>> = OnceLock::new();
 
-
-
 pub unsafe fn napi_create_bigint_words(
   env: napi_env,
   sign_bit: c_int,
@@ -22,5 +20,7 @@ pub unsafe fn napi_create_bigint_words(
   words: *const u64,
   result: *mut napi_value,
 ) -> napi_status {
-  CACHE.get_or_init(|| super::super::super::libnode::libnode_sym(SYMBOL))(env, sign_bit, word_count, words, result)
+  CACHE.get_or_init(|| super::super::super::libnode::libnode_sym(SYMBOL))(
+    env, sign_bit, word_count, words, result,
+  )
 }

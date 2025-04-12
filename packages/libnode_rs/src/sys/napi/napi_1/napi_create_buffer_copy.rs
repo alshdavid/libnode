@@ -20,5 +20,11 @@ pub unsafe fn napi_create_buffer_copy(
   result_data: *mut *mut c_void,
   result: *mut napi_value,
 ) -> napi_status {
-  CACHE.get_or_init(|| super::super::super::libnode::libnode_sym(SYMBOL))(env, length, data, result_data, result)
+  CACHE.get_or_init(|| super::super::super::libnode::libnode_sym(SYMBOL))(
+    env,
+    length,
+    data,
+    result_data,
+    result,
+  )
 }

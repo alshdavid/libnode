@@ -8,13 +8,13 @@ type SIGNATURE =
   fn(env: napi_env, object: napi_value, utf8name: *const c_char, value: napi_value) -> napi_status;
 static CACHE: OnceLock<super::super::super::libnode::DynSymbol<SIGNATURE>> = OnceLock::new();
 
-
-
 pub unsafe fn napi_set_named_property(
   env: napi_env,
   object: napi_value,
   utf8name: *const c_char,
   value: napi_value,
 ) -> napi_status {
-  CACHE.get_or_init(|| super::super::super::libnode::libnode_sym(SYMBOL))(env, object, utf8name, value)
+  CACHE.get_or_init(|| super::super::super::libnode::libnode_sym(SYMBOL))(
+    env, object, utf8name, value,
+  )
 }

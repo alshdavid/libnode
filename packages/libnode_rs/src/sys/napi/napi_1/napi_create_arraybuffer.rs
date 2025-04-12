@@ -18,5 +18,10 @@ pub unsafe fn napi_create_arraybuffer(
   data: *mut *mut c_void,
   result: *mut napi_value,
 ) -> napi_status {
-  CACHE.get_or_init(|| super::super::super::libnode::libnode_sym(SYMBOL))(env, byte_length, data, result)
+  CACHE.get_or_init(|| super::super::super::libnode::libnode_sym(SYMBOL))(
+    env,
+    byte_length,
+    data,
+    result,
+  )
 }

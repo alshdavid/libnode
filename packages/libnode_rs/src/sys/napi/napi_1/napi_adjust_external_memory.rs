@@ -12,5 +12,9 @@ pub unsafe fn napi_adjust_external_memory(
   change_in_bytes: i64,
   adjusted_value: *mut i64,
 ) -> napi_status {
-  CACHE.get_or_init(|| super::super::super::libnode::libnode_sym(SYMBOL))(env, change_in_bytes, adjusted_value)
+  CACHE.get_or_init(|| super::super::super::libnode::libnode_sym(SYMBOL))(
+    env,
+    change_in_bytes,
+    adjusted_value,
+  )
 }
