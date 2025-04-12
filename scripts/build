@@ -38,7 +38,12 @@ dir_nodejs="$DIR_ROOT/packages/libnode";
 dir_nodejs_sources="$DIR_ROOT/packages/libnode/node";
 dir_nodejs_release="$dir_nodejs_sources/out/Release";
 dir_nodejs_patches="$DIR_ROOT/packages/libnode/patches";
-dir_release="$DIR_ROOT/release/$platform-$arch"
+nodejs_version="$(cat $dir_nodejs/version.txt)"
+dir_release="$DIR_ROOT/release/libnode-$nodejs_version-$platform-$arch"
+
+function run() {
+    exec env LIBNODE_PATH="$dir_release/libnode.so" cargo run --package rust_node_embedded
+}
 
 function build() {
     fetch-nodejs-sources
@@ -54,6 +59,16 @@ function build-nodejs-sources() {
         ./configure --shared --dest-cpu $arch --dest-os $platform --with-arm-float-abi hard --with-arm-fpu neon
     else
         ./configure --shared --dest-cpu $arch --dest-os $platform
+    fi
+    make -j$threads
+}
+
+function build-nodejs-sources-static() {
+    cd $dir_nodejs_sources
+    if [ "$arch" = "arm64" ]; then
+        ./configure --shared --dest-cpu $arch --dest-os $platform --with-arm-float-abi hard --with-arm-fpu neon --fully-static --enable-static
+    else
+        ./configure --shared --dest-cpu $arch --dest-os $platform --fully-static --enable-static
     fi
     make -j$threads
 }
@@ -75,8 +90,6 @@ function copy-nodejs-output() {
 }
 
 function fetch-nodejs-sources() {
-    nodejs_version="$(cat $dir_nodejs/version.txt)"
-    
     if [ -d "$dir_nodejs_sources" ]; then
         cd $dir_nodejs_sources
         git reset --hard
@@ -108,7 +121,6 @@ function patch-nodejs-sources() {
 }
 
 function reset-nodejs-sources() {
-    nodejs_version="$(cat $dir_nodejs/version.txt)"
     cd $dir_nodejs_sources
     git reset --hard
     git fetch origin $nodejs_version

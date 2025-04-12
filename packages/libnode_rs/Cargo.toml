@@ -8,3 +8,6 @@ edition = "2021"
 license = "MIT"
 
 [lib]
+
+[dependencies]
+libloading = "*"
